@@ -1,0 +1,67 @@
+리액트 코드스플리팅
+출처 → https://velog.io/@velopert/react-code-splitting
+
+코드 스플리팅이란
+자바스크립트로 개발 할 때, 기본적으로 하나의 파일에 모든 로직들이 들어가게 된다. 그렇게 된가면 프로젝트의 규모가 커질수록 자바스크립트 파일 용량이 커진다.
+용량이 커지면 인터넷이 느린 환경에서 페이지 로딩속도가 더 느려진다.
+
+코드 스플리팅을 하게되면 지듬 당장 필요한 코드가 아니더라도 따로 분리시켜서 나중에 필요할 때 마다 불러와서 사용 할 수 있다.
+이러한 작업을 통해서 페이지의 로딩속도를 개선 할 수 있다.
+
+코드스플러팅은 리액트 앱 뿐만이 아니라 웹팩으로 구성된 다른 프로젝트들에도 적용 할 수 있다.
+참고하는 정리글은 리액트 위주라서 리액트앱에서 구현해볼 예정
+
+
+코드 스플리팅 할 함수 준비하기
+src 디렉토리에 notify.js 라는 파일을 만들어야한다.
+src/notify.js
+function notify() {
+  alert('종소리 울려라 종소리 울려~');
+}
+
+export default notify;
+
+app 컴포넌트에서 기존내용들을 다 비우고 버튼을 하나 만들어서 만든 함수를 호출하게 해야한다.
+src/App.js
+import React, { Component } from 'react';
+import notify from './notify';
+
+class App extends Component {
+  handleClick = () => {
+    notify();
+  };
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>Click Me</button>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+notify 함수는 사실 버튼을 클릭 할 때 까지필요가 없는 코드로 이제 위에 저 코드들을 스플리팅을 해보자.
+
+함수를 코드스플리팅 해보기
+notify 를 사용하기 위해서 단에서 import notify from './notify'; 이런식으로 불러왔는데,
+이걸 지우고 다음과 같이 handleClick 메소드에서 import 를 함수로 호출해서 불러와서 사용해보자.
+App.js
+import React, { Component } from 'react';
+
+class App extends Component {
+  handleClick = () => {
+    import('./notify').then(({ default: notify }) => {
+      notify();
+    });
+  };
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>Click Me</button>
+      </div>
+    );
+  }
+}
+
+export default App;
