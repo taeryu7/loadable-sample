@@ -1,4 +1,55 @@
 
+// 컴포넌트를 코드 스플리팅해보기
+import React, { Component } from 'react';
+
+class App extends Component {
+  state = {
+    SplitMe: null
+  };
+  handleClick = () => {
+    import('./SplitMe').then(({ default: SplitMe }) => {
+      this.setState({
+        SplitMe
+      });
+    });
+  };
+  render() {
+    const { SplitMe } = this.state;
+    return (
+      <div>
+        <button onClick={this.handleClick}>Click Me</button>
+        {SplitMe && <SplitMe />}
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+/*
+// 함수를 코드스플러팅 해보기
+import React, { Component } from 'react';
+
+class App extends Component {
+  handleClick = () => {
+    import('./notify').then(({ default: notify }) => {
+      notify();
+    });
+  };
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>Click Me</button>
+      </div>
+    );
+  }
+}
+
+export default App;
+*/
+
+/*
 import React, { Component } from 'react';
 import notify from './notify';
 
@@ -16,6 +67,7 @@ class App extends Component {
 }
 
 export default App;
+*/
 
 /*
 import logo from './logo.svg';
