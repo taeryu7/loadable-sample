@@ -17,7 +17,7 @@ class App extends Component {
     const { SplitMe } = this.state;
     return (
       <div>
-        <button onClick={this.handleClick}>Click Me</button>
+        <button onClick={this.handleClick}>Click Me</button> 
         {SplitMe && <SplitMe />}
       </div>
     );
